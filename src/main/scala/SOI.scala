@@ -9,7 +9,7 @@
 import java.io._
 
 import org.apache.poi.hwpf.HWPFDocument
-import org.apache.spark.input.PortableDataStream
+//import org.apache.spark.input.PortableDataStream
 
 import scala.collection.mutable.ListBuffer
 
@@ -28,24 +28,6 @@ object SOI {
     println(numSections)
 
     println(doc.getDocProperties()) // getShapesTable().getAllShapes();
-    /*
-val f = doc.getFields()
-
-val picturesTable = doc.getPicturesTable()
-List<Picture> allPictures = picturesTable.getAllPictures()
-println "${allPictures.size()} pictures"
-for (int k = 0; k < allPictures.size(); k++){
-  Picture p = allPictures.get(k)
-  println "> " + p.suggestFullFileName()
-}
-
-val range = doc.getRange
-for (i <- 0 until range.numParagraphs()) {
-  val par = range.getParagraph(i)
-  //println(par.text())
-}
-val tablePar = range.getParagraph(0)
-*/
 
     println(" -----------------")
 
@@ -129,12 +111,3 @@ val tablePar = range.getParagraph(0)
     println(SOIDoc(listOfActions))
   }
 }
-
-/*
-object SOIApp {
-  def main(args: Array[String]) {
-    val pds: PortableDataStream = Po
-    SOI.extract(args(0))
-  }
-}
-*/
