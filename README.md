@@ -2,7 +2,7 @@
 
 /usr/local/Cellar/hadoop/2.7.3/libexec/etc/hadoop/hadoop-env.sh,
 /usr/local/Cellar/hadoop/2.7.3/libexec/etc/hadoop/mapred-env.sh and
- /usr/local/Cellar/hadoop/2.7.3/libexec/etc/hadoop/yarn-env.sh
+/usr/local/Cellar/hadoop/2.7.3/libexec/etc/hadoop/yarn-env.sh
 
 ## A ne faire qu'une fois
 hdfs namenode -format
@@ -15,16 +15,21 @@ hdfs dfs -mkdir /user
 hdfs dfs -mkdir /user/tog
 
 
-## How to run the app
-spark-submit --executor-cores 2 --num-executors 2 --master yarn-cluster --class Main  --archives target/universal/sparkextract-1.0.zip#prout --jars target/universal/sparkextract-1.0/lib/org.apache.poi.poi-3.14.jar,target/universal/sparkextract-1.0/lib/org.apache.poi.poi-scratchpad-3.14.jar,target/universal/sparkextract-1.0/lib/org.datanucleus.datanucleus-api-jdo-5.0.3.jar,target/universal/sparkextract-1.0/lib/org.datanucleus.datanucleus-core-5.0.3.jar,target/universal/sparkextract-1.0/lib/org.datanucleus.datanucleus-rdbms-5.0.3.jar target/scala-2.10/sparkextract_2.10-1.0.jar
-
 # On cluster
 
+I dont use anymore sbt but gradle (http://gradle.org)
 sbt clean universal:packageBin
 
-spark-submit --executor-cores 2 --num-executors 2 --master yarn-cluster --class Main  --archives target/universal/sparkextract-1.0.zip#prout --conf spark.driver.extraClassPath='prout/sparkextract-1.0/lib/*'  --conf spark.executor.extraClassPath='prout/sparkextract-1.0/lib/*' target/scala-2.10/sparkextract_2.10-1.0.jar
+Therefore, you should use:
+ - gradle distZip
 
-The file is generated in a directory which name comes from UUID
+The build.gradle assume that you have a local maven repository.
+
+To run the code, use:
+
+- spark-submit --executor-cores 2 --num-executors 2 --master yarn-cluster --class Main --archives build/distributions/SparkExtract-0.1-SNAPSHOT.zip#myLibs --conf spark.driver.extraClassPath='myLibs/SparkExtract-0.1-SNAPSHOT/lib/' --conf spark.executor.extraClassPath='myLibs/SparkExtract-0.1-SNAPSHOT/lib/' --jars ../myRepo/poi-scratchpad-3.14.jar,../myRepo/poi-3.14.jar   build/libs/SparkExtract-0.1-SNAPSHOT.jar
+
+The result file is generated in a directory which name comes from UUID
 Use
 
 hdfs dfs -ls
